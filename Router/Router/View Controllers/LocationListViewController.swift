@@ -32,6 +32,8 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
         }
         
         locationTuples = [(sourceField, nil)]
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
+        self.view.addGestureRecognizer(tapGesture)
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,6 +55,10 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
     func formatAddressFromPlacemark(placemark: CLPlacemark) -> String {
         return (placemark.addressDictionary!["FormattedAddressLines"] as!
             [String]).joined(separator: ", ")
+    }
+    
+    func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        sourceField.resignFirstResponder()
     }
     
 
