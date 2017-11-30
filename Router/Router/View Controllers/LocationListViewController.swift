@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class LocationListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class LocationListViewController: UIViewController, UITableViewDataSource{
 
     @IBOutlet weak var sourceField: UITextField!
     @IBOutlet weak var enterButton: UIButton!
@@ -21,7 +21,6 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
-        tableView.delegate = self
         
         
         locationManager.delegate = self
@@ -47,12 +46,8 @@ class LocationListViewController: UIViewController, UITableViewDataSource, UITab
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! LocationListTableViewCell
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! LocationListTableViewCell
+        return cell
     }
     
     func formatAddressFromPlacemark(placemark: CLPlacemark) -> String {

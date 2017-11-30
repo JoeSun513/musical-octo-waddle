@@ -11,9 +11,11 @@ import UIKit
 class LocationListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var searchBar: UITextField!
+    @IBOutlet weak var enterButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.bringSubview(toFront: enterButton)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
