@@ -17,6 +17,7 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
     @IBOutlet weak var tableView: UITableView!
     let locationManager = CLLocationManager()
     var startLocationTuple: (textField: UITextField?, mapItem: MKMapItem?)
+    var otherLocationTuples = [(textField: UITextField?, mapItem: MKMapItem)]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
         }
         
         startLocationTuple = (sourceField, nil)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -43,12 +45,13 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return otherLocationTuples.count + 1
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! LocationListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath) as! LocationListTableViewCell
+        cell.delegate = self
         return cell
     }
     
@@ -59,6 +62,31 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
     
     func dismissKeyboard (_ sender: UITapGestureRecognizer) {
         sourceField.resignFirstResponder()
+    }
+    
+    @IBAction func startingSearch(_ sender: Any) {
+        tableView.endEditing(true)
+        
+        let currentTextField = startLocationTuple.textField
+        CLGeocoder().geocodeAddressString(currentTextField!.text!, completionHandler:
+            {(placemarks: Optional<Array<CLPlacemark>>, error: Optional<Error>) -> () in
+                if let placemarks = placemarks {
+                    var addresses = [String]()
+                    for placemark in placemarks {
+                        addresses.append(self.formatAddressFromPlacemark(placemark: placemark))
+                    }
+                    self.performSegue(withIdentifier: "startSegue", sender: addresses)
+                } else {
+                    
+                }
+        })
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let addresses = sender as? [String]
+        if let dest = segue.destination as? SearchViewController {
+            dest.addresses = addresses
+        }
     }
     
 

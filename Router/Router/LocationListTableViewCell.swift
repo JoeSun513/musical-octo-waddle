@@ -13,8 +13,9 @@ import CoreLocation
 class LocationListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var searchBar: UITextField!
+    weak var delegate: LocationListViewController?
     var locationTuple: (textField: UITextField?, mapItem: MKMapItem?)
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -34,11 +35,20 @@ class LocationListTableViewCell: UITableViewCell {
         CLGeocoder().geocodeAddressString(currentTextField!.text!, completionHandler:
             {(placemarks: Optional<Array<CLPlacemark>>, error: Optional<Error>) -> () in
                 if let placemarks = placemarks {
-                    
+                    var addresses = [String]()
+                    for placemark in placemarks {
+                        addresses.append(self.formatAddressFromPlacemark(placemark: placemark))
+                    }
+                    self.delegate?.performSegue(withIdentifier: "searchSegue", sender: addresses)
                 } else {
                     
                 }
         })
+    }
+    
+    func formatAddressFromPlacemark(placemark: CLPlacemark) -> String {
+        return (placemark.addressDictionary!["FormattedAddressLines"] as!
+            [String]).joined(separator: ", ")
     }
     
 }
