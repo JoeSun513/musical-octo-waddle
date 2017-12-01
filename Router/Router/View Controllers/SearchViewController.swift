@@ -47,5 +47,9 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         cell.address.text = addresses?[indexPath.row]
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "unwindToList", sender: self)
+    }
 
 }

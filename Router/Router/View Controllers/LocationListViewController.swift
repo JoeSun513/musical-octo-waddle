@@ -89,6 +89,10 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
         }
     }
     
+    @IBAction func exit(segue: UIStoryboardSegue) {
+        
+    }
+    
 
     /*
     // MARK: - Navigation
