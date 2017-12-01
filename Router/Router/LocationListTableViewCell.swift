@@ -7,15 +7,18 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
 class LocationListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var searchBar: UITextField!
-    @IBOutlet weak var enterButton: UIButton!
+    var locationTuple: (textField: UITextField?, mapItem: MKMapItem?)
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.bringSubview(toFront: enterButton)
+        locationTuple = (searchBar, nil)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -23,5 +26,19 @@ class LocationListTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
+    @IBAction func search(_ sender: Any) {
+        self.endEditing(true)
+        
+        let currentTextField = locationTuple.textField
+        CLGeocoder().geocodeAddressString(currentTextField!.text!, completionHandler:
+            {(placemarks: Optional<Array<CLPlacemark>>, error: Optional<Error>) -> () in
+                if let placemarks = placemarks {
+                    
+                } else {
+                    
+                }
+        })
+    }
+    
 }

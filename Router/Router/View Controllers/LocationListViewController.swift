@@ -16,7 +16,7 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
     @IBOutlet weak var enterButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     let locationManager = CLLocationManager()
-    var locationTuples: [(textField: UITextField?, mapItem: MKMapItem?)]!
+    var startLocationTuple: (textField: UITextField?, mapItem: MKMapItem?)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +31,7 @@ class LocationListViewController: UIViewController, UITableViewDataSource{
             locationManager.requestLocation()
         }
         
-        locationTuples = [(sourceField, nil)]
+        startLocationTuple = (sourceField, nil)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -90,7 +90,7 @@ extension LocationListViewController: CLLocationManagerDelegate {
             {(placemarks: Optional<Array<CLPlacemark>>, error: Optional<Error>) -> () in
                 if let placemarks = placemarks {
                     let placemark = placemarks[0]
-                    self.locationTuples[0].mapItem = MKMapItem(placemark:
+                    self.startLocationTuple.mapItem = MKMapItem(placemark:
                         MKPlacemark(coordinate: placemark.location!.coordinate,
                                     addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
                     self.sourceField.text = self.formatAddressFromPlacemark(placemark: placemark)
